@@ -129,7 +129,7 @@
         .forest-far {
             background-image: url('images/layer2_left.png'), url('images/layer2_right.png');
             background-position: left bottom, right bottom;
-            background-size: 50% auto, 50% auto;
+            background-size: 45% auto, 45% auto;
             background-repeat: no-repeat;
             opacity: 0.7;
         }
@@ -138,7 +138,7 @@
         .forest-mid {
             background-image: url('images/layer1_left.png'), url('images/layer1_right.png');
             background-position: left bottom, right bottom;
-            background-size: 50% auto, 50% auto;
+            background-size: 45% auto, 45% auto;
             background-repeat: no-repeat;
             opacity: 0.85;
         }
@@ -147,7 +147,7 @@
         .forest-near {
             background-image: url('images/layer1_left.png'), url('images/layer1_right.png');
             background-position: left bottom, right bottom;
-            background-size: 60% auto, 60% auto;
+            background-size: 50% auto, 50% auto;
             background-repeat: no-repeat;
             opacity: 0.6;
         }
@@ -156,7 +156,7 @@
         .forest-foreground {
             background-image: url('images/layer2_left.png'), url('images/layer2_right.png');
             background-position: left bottom, right bottom;
-            background-size: 70% auto, 70% auto;
+            background-size: 55% auto, 55% auto;
             background-repeat: no-repeat;
             opacity: 0.5;
         }
@@ -612,35 +612,39 @@
             const scrollProgress = scrollY / maxScroll;
             
             // Calculate how far each layer should move to the sides (in pixels)
-            const maxSpread = 800; // Maximum distance layers spread
+            const maxSpread = 1200; // Maximum distance layers spread horizontally
             
             // Background - stays centered, just darkens slightly
             const bgLayer = document.querySelector('.forest-bg');
             bgLayer.style.opacity = Math.max(0.6, 0.8 - scrollProgress * 0.2);
             
-            // Layer 2 (far) - spreads slowly
+            // Layer 2 (far) - spreads slowly, minimal scale
             const farLayer = document.querySelector('.forest-far');
-            const farSpread = scrollProgress * maxSpread * 0.3;
-            farLayer.style.transform = `translateX(0)`;
+            const farSpread = scrollProgress * maxSpread * 0.4;
+            const farScale = 1 + (scrollProgress * 0.1); // Only 10% scale increase
             farLayer.style.backgroundPosition = `${-farSpread}px bottom, calc(100% + ${farSpread}px) bottom`;
+            farLayer.style.backgroundSize = `${45 * farScale}% auto, ${45 * farScale}% auto`;
             
-            // Layer 1 (mid) - spreads faster
+            // Layer 1 (mid) - spreads faster, slight scale
             const midLayer = document.querySelector('.forest-mid');
-            const midSpread = scrollProgress * maxSpread * 0.6;
-            midLayer.style.transform = `translateX(0)`;
+            const midSpread = scrollProgress * maxSpread * 0.8;
+            const midScale = 1 + (scrollProgress * 0.15); // Only 15% scale increase
             midLayer.style.backgroundPosition = `${-midSpread}px bottom, calc(100% + ${midSpread}px) bottom`;
+            midLayer.style.backgroundSize = `${45 * midScale}% auto, ${45 * midScale}% auto`;
             
-            // Near - spreads even faster
+            // Near - spreads much faster, moderate scale
             const nearLayer = document.querySelector('.forest-near');
-            const nearSpread = scrollProgress * maxSpread * 1;
-            nearLayer.style.transform = `translateX(0)`;
+            const nearSpread = scrollProgress * maxSpread * 1.3;
+            const nearScale = 1 + (scrollProgress * 0.25); // 25% scale increase
             nearLayer.style.backgroundPosition = `${-nearSpread}px bottom, calc(100% + ${nearSpread}px) bottom`;
+            nearLayer.style.backgroundSize = `${50 * nearScale}% auto, ${50 * nearScale}% auto`;
             
-            // Foreground - spreads fastest, goes off screen
+            // Foreground - spreads fastest, whooshes past
             const foregroundLayer = document.querySelector('.forest-foreground');
-            const foreSpread = scrollProgress * maxSpread * 1.5;
-            foregroundLayer.style.transform = `translateX(0)`;
+            const foreSpread = scrollProgress * maxSpread * 2;
+            const foreScale = 1 + (scrollProgress * 0.4); // 40% scale increase
             foregroundLayer.style.backgroundPosition = `${-foreSpread}px bottom, calc(100% + ${foreSpread}px) bottom`;
+            foregroundLayer.style.backgroundSize = `${55 * foreScale}% auto, ${55 * foreScale}% auto`;
             
             // Gentle darkening as we go deeper
             const container = document.querySelector('.forest-container');
