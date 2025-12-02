@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Overgrown Garden</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(to bottom, #f4f1e8 0%, #e8f4e8 50%, #f1f4e8 100%);
+            cursor: none;
+            overflow-x: hidden;
+        }
+
+        /* Custom Cursor */
+        .cursor-trail {
+            position: fixed;
+            pointer-events: none;
+            font-size: 20px;
+            z-index: 9999;
+            animation: fadeOut 1s forwards;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateY(-20px) rotate(20deg);
+            }
+        }
+
+        /* Leaf Navigation */
+        .leaf-nav {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .leaf-link {
+            font-size: 28px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .leaf-link:hover {
+            transform: scale(1.2) rotate(5deg);
+            animation: sway 0.5s ease-in-out infinite;
+        }
+
+        .leaf-label {
+            position: absolute;
+            right: 45px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            color: #2d5016;
+            font-family: 'Courier New', monospace;
+            border: 1px solid #7d9b6f;
+        }
+
+        .leaf-link:hover .leaf-label {
+            opacity: 1;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        /* Parallax Layers */
+        .parallax-container {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .parallax-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .forest-bg {
+            background: radial-gradient(circle at 20% 50%, rgba(120, 150, 90, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 30%, rgba(90, 120, 70, 0.1) 0%, transparent 50%);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            color: #2d5016;
+            text-align: center;
+            z-index: 10;
+            animation: floatIn 2s ease-out;
+        }
+
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .floating-flower {
+            position: absolute;
+            font-size: 40px;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            padding: 100px 50px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 48px;
+            color: #2d5016;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '🌿';
+            margin-left: 15px;
+        }
+
+        /* Photography Section - Minimal */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .photo-item {
+            aspect-ratio: 4/3;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-style: italic;
+        }
+
+        .photo-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Drawings - Scattered Vibe */
+        .drawings-container {
+            position: relative;
+            min-height: 80vh;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .drawing-item {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .drawing-item:hover {
+            transform: scale(1.1) rotate(5deg);
+            z-index: 10;
+        }
+
+        .drawing-item:nth-child(1) { top: 10%; left: 10%; }
+        .drawing-item:nth-child(2) { top: 20%; right: 15%; }
+        .drawing-item:nth-child(3) { top: 50%; left: 20%; }
+        .drawing-item:nth-child(4) { top: 60%; right: 25%; }
+        .drawing-item:nth-child(5) { top: 30%; left: 50%; }
+
+        /* Horizontal Infinite Scroll */
+        .infinite-scroll {
+            overflow: hidden;
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 40px 0;
+        }
+
+        .scroll-content {
+            display: flex;
+            animation: scroll 30s linear infinite;
+        }
+
+        .scroll-item {
+            min-width: 250px;
+            height: 250px;
+            margin: 0 20px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Music Section */
+        .music-player {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .music-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .music-item h3 {
+            color: #2d5016;
+            margin-bottom: 10px;
+        }
+
+        /* Papers Section */
+        .papers-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .paper-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #7d9b6f;
+            transition: transform 0.2s ease;
+        }
+
+        .paper-item:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .paper-item a {
+            color: #2d5016;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .paper-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animated Elements */
+        .vine {
+            position: absolute;
+            width: 3px;
+            background: linear-gradient(to bottom, #7d9b6f, transparent);
+            height: 300px;
+            opacity: 0.3;
+        }
+
+        .bloom {
+            position: absolute;
+            font-size: 30px;
+            opacity: 0;
+            animation: bloom 2s ease-out forwards;
+        }
+
+        @keyframes bloom {
+            from {
+                opacity: 0;
+                transform: scale(0) rotate(0deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Leaf Navigation -->
+    <nav class="leaf-nav">
+        <a href="#photography" class="leaf-link">🍃<span class="leaf-label">photography</span></a>
+        <a href="#drawings" class="leaf-link">🌿<span class="leaf-label">funny drawings</span></a>
+        <a href="#tattoos" class="leaf-link">🍂<span class="leaf-label">tattoo work</span></a>
+        <a href="#art" class="leaf-link">🌱<span class="leaf-label">art i like</span></a>
+        <a href="#music" class="leaf-link">🌾<span class="leaf-label">music</span></a>
+        <a href="#papers" class="leaf-link">🍀<span class="leaf-label">science stuff</span></a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero parallax-container">
+        <div class="parallax-layer forest-bg"></div>
+        <h1>welcome to my garden 🌸</h1>
+        <div class="floating-flower" style="left: 20%; top: 20%;">🌼</div>
+        <div class="floating-flower" style="right: 25%; top: 30%; animation-delay: 1s;">🌺</div>
+        <div class="floating-flower" style="left: 60%; bottom: 30%; animation-delay: 2s;">🌻</div>
+        <div class="floating-flower" style="right: 15%; bottom: 20%; animation-delay: 1.5s;">🌷</div>
+    </section>
+
+    <!-- Photography Section -->
+    <section id="photography">
+        <h2 class="section-title">photography</h2>
+        <div class="photo-grid">
+            <div class="photo-item">photo 1</div>
+            <div class="photo-item">photo 2</div>
+            <div class="photo-item">photo 3</div>
+            <div class="photo-item">photo 4</div>
+            <div class="photo-item">photo 5</div>
+            <div class="photo-item">photo 6</div>
+        </div>
+    </section>
+
+    <!-- Drawings Section -->
+    <section id="drawings">
+        <h2 class="section-title">funny drawings</h2>
+        <div class="drawings-container">
+            <div class="drawing-item">drawing 1</div>
+            <div class="drawing-item">drawing 2</div>
+            <div class="drawing-item">drawing 3</div>
+            <div class="drawing-item">drawing 4</div>
+            <div class="drawing-item">drawing 5</div>
+        </div>
+    </section>
+
+    <!-- Tattoos Section -->
+    <section id="tattoos">
+        <h2 class="section-title">tattoo work</h2>
+        <div class="infinite-scroll">
+            <div class="scroll-content">
+                <div class="scroll-item">tattoo 1</div>
+                <div class="scroll-item">tattoo 2</div>
+                <div class="scroll-item">tattoo 3</div>
+                <div class="scroll-item">tattoo 4</div>
+                <div class="scroll-item">tattoo 5</div>
+                <!-- Duplicated for seamless loop -->
+                <div class="scroll-item">tattoo 1</div>
+                <div class="scroll-item">tattoo 2</div>
+                <div class="scroll-item">tattoo 3</div>
+                <div class="scroll-item">tattoo 4</div>
+                <div class="scroll-item">tattoo 5</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Art I Like Section -->
+    <section id="art">
+        <h2 class="section-title">art i like</h2>
+        <div class="infinite-scroll">
+            <div class="scroll-content">
+                <div class="scroll-item">artwork 1</div>
+                <div class="scroll-item">artwork 2</div>
+                <div class="scroll-item">artwork 3</div>
+                <div class="scroll-item">artwork 4</div>
+                <div class="scroll-item">artwork 5</div>
+                <!-- Duplicated for seamless loop -->
+                <div class="scroll-item">artwork 1</div>
+                <div class="scroll-item">artwork 2</div>
+                <div class="scroll-item">artwork 3</div>
+                <div class="scroll-item">artwork 4</div>
+                <div class="scroll-item">artwork 5</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Music Section -->
+    <section id="music">
+        <h2 class="section-title">music i've made</h2>
+        <div class="music-player">
+            <div class="music-item">
+                <h3>Song Title 1</h3>
+                <audio controls style="width: 100%;">
+                    <source src="your-song.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+            <div class="music-item">
+                <h3>Song Title 2</h3>
+                <p>🎵 <a href="https://soundcloud.com/yourusername" target="_blank">Listen on SoundCloud</a></p>
+            </div>
+            <div class="music-item">
+                <h3>Song Title 3</h3>
+                <p>🎵 <a href="https://open.spotify.com/artist/yourid" target="_blank">Listen on Spotify</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Science Papers Section -->
+    <section id="papers">
+        <h2 class="section-title">science stuff</h2>
+        <div class="papers-list">
+            <div class="paper-item">
+                <a href="https://arxiv.org/your-paper" target="_blank">Interesting Paper Title 1</a>
+            </div>
+            <div class="paper-item">
+                <a href="https://arxiv.org/your-paper" target="_blank">Interesting Paper Title 2</a>
+            </div>
+            <div class="paper-item">
+                <a href="https://arxiv.org/your-paper" target="_blank">Interesting Paper Title 3</a>
+            </div>
+            <div class="paper-item">
+                <a href="https://arxiv.org/your-paper" target="_blank">Interesting Paper Title 4</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Custom Cursor Trail
+        document.addEventListener('mousemove', (e) => {
+            const flowers = ['🌸', '🌼', '🌺', '🌻', '🌷', '🌹'];
+            const flower = document.createElement('div');
+            flower.className = 'cursor-trail';
+            flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+            flower.style.left = e.pageX + 'px';
+            flower.style.top = e.pageY + 'px';
+            document.body.appendChild(flower);
+            
+            setTimeout(() => flower.remove(), 1000);
+        });
+
+        // Parallax Effect
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxLayers = document.querySelectorAll('.parallax-layer');
+            
+            parallaxLayers.forEach((layer, index) => {
+                const speed = (index + 1) * 0.3;
+                layer.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Bloom flowers on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Add random flowers when section comes into view
+                    for (let i = 0; i < 3; i++) {
+                        setTimeout(() => {
+                            const flower = document.createElement('div');
+                            flower.className = 'bloom';
+                            flower.textContent = ['🌸', '🌼', '🌺'][Math.floor(Math.random() * 3)];
+                            flower.style.left = Math.random() * 90 + '%';
+                            flower.style.top = Math.random() * 80 + 20 + '%';
+                            entry.target.appendChild(flower);
+                            
+                            setTimeout(() => flower.remove(), 2000);
+                        }, i * 300);
+                    }
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('.leaf-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
