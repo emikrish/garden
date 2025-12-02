@@ -234,9 +234,10 @@
             min-height: 100vh;
             padding: 100px 50px;
             position: relative;
-            background: rgba(240, 245, 235, 0.95);
+            background: rgba(240, 245, 235, 0.75);
             margin: 20px 0;
             border-radius: 30px;
+            backdrop-filter: blur(10px);
         }
 
         .section-title {
@@ -604,43 +605,46 @@
             setTimeout(() => flower.remove(), 1000);
         });
 
-        // DEPTH PARALLAX - Moving into the forest
-        let lastScrollY = 0;
-        
+        // DEPTH PARALLAX - Walking between layers into the forest
         window.addEventListener('scroll', () => {
             const scrollY = window.pageYOffset;
-            const scrollProgress = scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollProgress = scrollY / maxScroll;
             
-            // Background - moves slowest, fades out
+            // Calculate how far each layer should move to the sides (in pixels)
+            const maxSpread = 800; // Maximum distance layers spread
+            
+            // Background - stays centered, just darkens slightly
             const bgLayer = document.querySelector('.forest-bg');
-            bgLayer.style.transform = `scale(${1 + scrollProgress * 0.1})`;
-            bgLayer.style.opacity = Math.max(0.3, 0.8 - scrollProgress * 0.5);
+            bgLayer.style.opacity = Math.max(0.6, 0.8 - scrollProgress * 0.2);
             
-            // Far trees - grow and move
+            // Layer 2 (far) - spreads slowly
             const farLayer = document.querySelector('.forest-far');
-            farLayer.style.transform = `scale(${1 + scrollProgress * 0.3}) translateY(${scrollProgress * 50}px)`;
-            farLayer.style.opacity = Math.max(0.4, 0.7 - scrollProgress * 0.3);
+            const farSpread = scrollProgress * maxSpread * 0.3;
+            farLayer.style.transform = `translateX(0)`;
+            farLayer.style.backgroundPosition = `${-farSpread}px bottom, calc(100% + ${farSpread}px) bottom`;
             
-            // Mid trees - grow more, move more
+            // Layer 1 (mid) - spreads faster
             const midLayer = document.querySelector('.forest-mid');
-            midLayer.style.transform = `scale(${1 + scrollProgress * 0.6}) translateY(${scrollProgress * 100}px)`;
-            midLayer.style.opacity = Math.max(0.5, 0.8 - scrollProgress * 0.2);
+            const midSpread = scrollProgress * maxSpread * 0.6;
+            midLayer.style.transform = `translateX(0)`;
+            midLayer.style.backgroundPosition = `${-midSpread}px bottom, calc(100% + ${midSpread}px) bottom`;
             
-            // Near foliage - zooms past
+            // Near - spreads even faster
             const nearLayer = document.querySelector('.forest-near');
-            nearLayer.style.transform = `scale(${1 + scrollProgress * 1.2}) translateY(${scrollProgress * 200}px)`;
-            nearLayer.style.opacity = Math.max(0.3, 0.9 - scrollProgress * 0.4);
+            const nearSpread = scrollProgress * maxSpread * 1;
+            nearLayer.style.transform = `translateX(0)`;
+            nearLayer.style.backgroundPosition = `${-nearSpread}px bottom, calc(100% + ${nearSpread}px) bottom`;
             
-            // Foreground - really zooms
+            // Foreground - spreads fastest, goes off screen
             const foregroundLayer = document.querySelector('.forest-foreground');
-            foregroundLayer.style.transform = `scale(${1 + scrollProgress * 2}) translateY(${scrollProgress * 300}px)`;
-            foregroundLayer.style.opacity = Math.max(0, 1 - scrollProgress * 0.6);
+            const foreSpread = scrollProgress * maxSpread * 1.5;
+            foregroundLayer.style.transform = `translateX(0)`;
+            foregroundLayer.style.backgroundPosition = `${-foreSpread}px bottom, calc(100% + ${foreSpread}px) bottom`;
             
-            // Darken everything as we go deeper
+            // Gentle darkening as we go deeper
             const container = document.querySelector('.forest-container');
-            container.style.filter = `brightness(${Math.max(0.4, 1 - scrollProgress * 0.6)})`;
-            
-            lastScrollY = scrollY;
+            container.style.filter = `brightness(${Math.max(0.6, 1 - scrollProgress * 0.4)})`;
         });
 
         // Bloom flowers on scroll
