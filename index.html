@@ -14,8 +14,12 @@
         body {
             font-family: 'Georgia', serif;
             background: #1a1a1a;
-            cursor: none;
+            cursor: none !important;
             overflow-x: hidden;
+        }
+
+        * {
+            cursor: none !important;
         }
 
         /* Custom Cursor */
@@ -121,7 +125,9 @@
 
         /* Background - furthest back */
         .forest-bg {
-            background: radial-gradient(ellipse at center, #4a6741 0%, #2d4028 50%, #1a2419 100%);
+            background-image: url('images/tree_backing.jpeg');
+            background-size: cover;
+            background-position: center;
             opacity: 0.8;
         }
 
@@ -132,6 +138,15 @@
             background-size: 45% auto, 45% auto;
             background-repeat: no-repeat;
             opacity: 0.7;
+        }
+
+        /* Trees layer - new middle layer */
+        .forest-trees {
+            background-image: url('images/trees1.png'), url('images/trees2.png');
+            background-position: left bottom, right bottom;
+            background-size: 40% auto, 40% auto;
+            background-repeat: no-repeat;
+            opacity: 0.8;
         }
 
         /* Layer 1 - closer (your layer1 images) */
@@ -316,6 +331,9 @@
         .drawing-item:nth-child(6) { top: 70%; left: 40%; }
         .drawing-item:nth-child(7) { top: 15%; left: 60%; }
         .drawing-item:nth-child(8) { top: 45%; right: 10%; }
+        .drawing-item:nth-child(9) { top: 80%; left: 15%; }
+        .drawing-item:nth-child(10) { top: 35%; right: 35%; }
+        .drawing-item:nth-child(11) { top: 55%; left: 70%; }
 
         /* Horizontal Infinite Scroll */
         .infinite-scroll {
@@ -475,6 +493,7 @@
     <div class="forest-container">
         <div class="forest-layer forest-bg"></div>
         <div class="forest-layer forest-far"></div>
+        <div class="forest-layer forest-trees"></div>
         <div class="forest-layer forest-mid"></div>
         <div class="forest-layer forest-near"></div>
         <div class="forest-layer forest-foreground"></div>
@@ -487,9 +506,7 @@
     <div class="particle" style="left: 70%; top: 30%; animation-delay: 6s;">🌾</div>
 
     <!-- Swimming Fish Skeletons -->
-    <img src="images/fiskelet1.png" class="fish" id="fish1" alt="fish skeleton">
-    <img src="images/fiskelet2.png" class="fish" id="fish2" alt="fish skeleton">
-    <img src="images/fiskelet3.png" class="fish" id="fish3" alt="fish skeleton">
+    <!-- Removed - now static in drawings section -->
 
     <!-- Leaf Navigation -->
     <nav class="leaf-nav">
@@ -546,11 +563,17 @@
         <section id="drawings">
             <h2 class="section-title">funny drawings</h2>
             <div class="drawings-container">
-                <div class="drawing-item">drawing 1</div>
-                <div class="drawing-item">drawing 2</div>
-                <div class="drawing-item">drawing 3</div>
-                <div class="drawing-item">drawing 4</div>
-                <div class="drawing-item">drawing 5</div>
+                <div class="drawing-item"><img src="images/fiskelet1.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="fish skeleton"></div>
+                <div class="drawing-item"><img src="images/fiskelet2.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="fish skeleton"></div>
+                <div class="drawing-item"><img src="images/fiskelet3.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="fish skeleton"></div>
+                <div class="drawing-item"><img src="images/face1.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="face drawing"></div>
+                <div class="drawing-item"><img src="images/balloonflower.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="balloon flower"></div>
+                <div class="drawing-item"><img src="images/lily.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="lily"></div>
+                <div class="drawing-item"><img src="images/liquidgold.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="liquid gold"></div>
+                <div class="drawing-item"><img src="images/littleman.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="little man"></div>
+                <div class="drawing-item"><img src="images/oupy.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="oupy"></div>
+                <div class="drawing-item"><img src="images/smoke.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="smoke"></div>
+                <div class="drawing-item"><img src="images/nasturtiums_1.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="nasturtiums"></div>
             </div>
         </section>
 
@@ -660,21 +683,28 @@
             // Calculate how far each layer should move to the sides (in pixels)
             const maxSpread = 1200; // Maximum distance layers spread horizontally
             
-            // Background - stays centered, just darkens slightly
+            // Background - your tree_backing.jpeg stays mostly fixed
             const bgLayer = document.querySelector('.forest-bg');
             bgLayer.style.opacity = Math.max(0.6, 0.8 - scrollProgress * 0.2);
             
             // Layer 2 (far) - spreads slowly, minimal scale
             const farLayer = document.querySelector('.forest-far');
             const farSpread = scrollProgress * maxSpread * 0.4;
-            const farScale = 1 + (scrollProgress * 0.1); // Only 10% scale increase
+            const farScale = 1 + (scrollProgress * 0.1);
             farLayer.style.backgroundPosition = `${-farSpread}px bottom, calc(100% + ${farSpread}px) bottom`;
             farLayer.style.backgroundSize = `${45 * farScale}% auto, ${45 * farScale}% auto`;
+            
+            // Trees layer - spreads at medium speed
+            const treesLayer = document.querySelector('.forest-trees');
+            const treesSpread = scrollProgress * maxSpread * 0.6;
+            const treesScale = 1 + (scrollProgress * 0.12);
+            treesLayer.style.backgroundPosition = `${-treesSpread}px bottom, calc(100% + ${treesSpread}px) bottom`;
+            treesLayer.style.backgroundSize = `${40 * treesScale}% auto, ${40 * treesScale}% auto`;
             
             // Layer 1 (mid) - spreads faster, slight scale
             const midLayer = document.querySelector('.forest-mid');
             const midSpread = scrollProgress * maxSpread * 0.8;
-            const midScale = 1 + (scrollProgress * 0.15); // Only 15% scale increase
+            const midScale = 1 + (scrollProgress * 0.15);
             midLayer.style.backgroundPosition = `${-midSpread}px bottom, calc(100% + ${midSpread}px) bottom`;
             midLayer.style.backgroundSize = `${45 * midScale}% auto, ${45 * midScale}% auto`;
             
@@ -729,38 +759,6 @@
                 const target = document.querySelector(link.getAttribute('href'));
                 target.scrollIntoView({ behavior: 'smooth' });
             });
-        });
-
-        // Creepy fish skeletons that appear deeper in the page
-        let fishTriggered = false;
-        
-        window.addEventListener('scroll', () => {
-            const scrollY = window.pageYOffset;
-            const triggerPoint = document.documentElement.scrollHeight * 0.3; // 30% down the page
-            
-            if (scrollY > triggerPoint && !fishTriggered) {
-                fishTriggered = true;
-                
-                // Trigger fish swimming at intervals
-                setTimeout(() => {
-                    const fish1 = document.getElementById('fish1');
-                    fish1.classList.add('active');
-                    fish1.style.animation = 'swim1 15s linear infinite';
-                }, 1000);
-                
-                setTimeout(() => {
-                    const fish2 = document.getElementById('fish2');
-                    fish2.classList.add('active');
-                    fish2.style.animation = 'swim2 18s linear infinite';
-                    fish2.style.transform = 'scaleX(-1)'; // Flip to swim other direction
-                }, 3000);
-                
-                setTimeout(() => {
-                    const fish3 = document.getElementById('fish3');
-                    fish3.classList.add('active');
-                    fish3.style.animation = 'swim3 20s linear infinite';
-                }, 5000);
-            }
         });
     </script>
 </body>
