@@ -418,6 +418,54 @@
                 transform: scale(1) rotate(360deg);
             }
         }
+
+        /* Swimming Fish Skeletons */
+        .fish {
+            position: fixed;
+            width: 80px;
+            height: auto;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 500;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+        }
+
+        @keyframes swim1 {
+            0% {
+                left: -100px;
+                top: 20%;
+            }
+            100% {
+                left: 110%;
+                top: 25%;
+            }
+        }
+
+        @keyframes swim2 {
+            0% {
+                right: -100px;
+                top: 40%;
+            }
+            100% {
+                right: 110%;
+                top: 35%;
+            }
+        }
+
+        @keyframes swim3 {
+            0% {
+                left: -100px;
+                top: 60%;
+            }
+            100% {
+                left: 110%;
+                top: 65%;
+            }
+        }
+
+        .fish.active {
+            opacity: 0.6;
+        }
     </style>
 </head>
 <body>
@@ -435,6 +483,11 @@
     <div class="particle" style="left: 80%; top: 40%; animation-delay: 2s;">🌿</div>
     <div class="particle" style="left: 30%; top: 60%; animation-delay: 4s;">🍂</div>
     <div class="particle" style="left: 70%; top: 30%; animation-delay: 6s;">🌾</div>
+
+    <!-- Swimming Fish Skeletons -->
+    <img src="images/fiskelet1.png" class="fish" id="fish1" alt="fish skeleton">
+    <img src="images/fiskelet2.png" class="fish" id="fish2" alt="fish skeleton">
+    <img src="images/fiskelet3.png" class="fish" id="fish3" alt="fish skeleton">
 
     <!-- Leaf Navigation -->
     <nav class="leaf-nav">
@@ -581,22 +634,13 @@
     </div>
 
     <script>
-        // Custom Cursor Trail with images
-        // Note: Replace emoji with actual image paths when you have them
+        // Custom Cursor Trail with flower images
         document.addEventListener('mousemove', (e) => {
-            // For now using emoji, but structure is ready for images
-            const flowers = ['🌸', '🌼', '🌺', '🌻', '🌷', '🌹'];
-            // When you have images, replace with:
-            // const flowers = ['images/flower1.png', 'images/flower2.png', 'images/flower3.png'];
+            const flowers = ['images/anemone1.png', 'images/anemone2.png', 'images/anemone3.png'];
             
             const flower = document.createElement('div');
             flower.className = 'cursor-trail';
-            
-            // For emoji (current):
-            flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
-            
-            // For images (when ready), uncomment this and comment out textContent above:
-            // flower.innerHTML = `<img src="${flowers[Math.floor(Math.random() * flowers.length)]}" alt="flower">`;
+            flower.innerHTML = `<img src="${flowers[Math.floor(Math.random() * flowers.length)]}" alt="flower">`;
             
             flower.style.left = e.pageX + 'px';
             flower.style.top = e.pageY + 'px';
@@ -683,6 +727,38 @@
                 const target = document.querySelector(link.getAttribute('href'));
                 target.scrollIntoView({ behavior: 'smooth' });
             });
+        });
+
+        // Creepy fish skeletons that appear deeper in the page
+        let fishTriggered = false;
+        
+        window.addEventListener('scroll', () => {
+            const scrollY = window.pageYOffset;
+            const triggerPoint = document.documentElement.scrollHeight * 0.3; // 30% down the page
+            
+            if (scrollY > triggerPoint && !fishTriggered) {
+                fishTriggered = true;
+                
+                // Trigger fish swimming at intervals
+                setTimeout(() => {
+                    const fish1 = document.getElementById('fish1');
+                    fish1.classList.add('active');
+                    fish1.style.animation = 'swim1 15s linear infinite';
+                }, 1000);
+                
+                setTimeout(() => {
+                    const fish2 = document.getElementById('fish2');
+                    fish2.classList.add('active');
+                    fish2.style.animation = 'swim2 18s linear infinite';
+                    fish2.style.transform = 'scaleX(-1)'; // Flip to swim other direction
+                }, 3000);
+                
+                setTimeout(() => {
+                    const fish3 = document.getElementById('fish3');
+                    fish3.classList.add('active');
+                    fish3.style.animation = 'swim3 20s linear infinite';
+                }, 5000);
+            }
         });
     </script>
 </body>
