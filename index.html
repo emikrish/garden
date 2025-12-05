@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Overgrown Garden</title>
+
     <style>
         /* ========== RESET ========== */
         * {
@@ -12,7 +13,7 @@
             box-sizing: border-box;
         }
 
-        /* ========== CUSTOM FONT ========== */
+        /* ========== FONTS ========== */
         @font-face {
             font-family: "wakupo";
             src: local("wakupo"),
@@ -22,62 +23,44 @@
             font-style: normal;
         }
 
-        /* ========== GLOBAL ========== */
         body {
-            font-family: "Georgia", serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             background: #1a1a1a;
             cursor: none !important;
             overflow-x: hidden;
+            color: #f3f5f0;
         }
 
-        * {
-            cursor: none !important;
-        }
-
-        h1, h2, .section-title {
+        /* Titles only use wakupo */
+        h1,
+        h2,
+        .section-title {
             font-family: "wakupo", serif;
             letter-spacing: 1px;
         }
 
-        /* ========== CUSTOM CURSOR ========== */
+        /* Hide native cursor everywhere */
+        * {
+            cursor: none !important;
+        }
 
-        /* main cursor that always follows mouse */
+        /* ========== CUSTOM CURSOR (NO TRAILS) ========== */
         #cursor-core {
             position: fixed;
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             pointer-events: none;
-            z-index: 999999999; /* obnoxiously high to always be on top */
+            z-index: 999999999; /* Always on top of everything */
             transform: translate(-50%, -50%);
         }
+
         #cursor-core img {
             width: 100%;
             height: 100%;
             object-fit: contain;
         }
 
-        /* trailing flowers */
-        .cursor-trail {
-            position: fixed;
-            pointer-events: none;
-            z-index: 99999;
-            animation: fadeOut 1s forwards;
-        }
-
-        .cursor-trail img {
-            width: 30px;
-            height: 30px;
-            object-fit: contain;
-        }
-
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                transform: translateY(-20px) rotate(20deg);
-            }
-        }
-
-        /* ========== LEAF NAVIGATION ========== */
+        /* ========== LEAF NAV ========== */
         .leaf-nav {
             position: fixed;
             right: 40px;
@@ -90,18 +73,10 @@
         }
 
         .leaf-link {
-            cursor: pointer;
             transition: transform 0.3s ease;
             text-decoration: none;
             position: relative;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
-        }
-
-        .leaf-link img {
-            width: 35px;
-            height: 35px;
-            object-fit: contain;
-            display: block;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
         }
 
         .leaf-link:hover {
@@ -123,7 +98,7 @@
             pointer-events: none;
             transition: opacity 0.3s ease;
             color: #2d5016;
-            font-family: 'Courier New', monospace;
+            font-family: "Courier New", monospace;
             border: 1px solid #7d9b6f;
         }
 
@@ -132,11 +107,16 @@
         }
 
         @keyframes sway {
-            0%, 100% { transform: rotate(-5deg); }
-            50% { transform: rotate(5deg); }
+            0%,
+            100% {
+                transform: rotate(-5deg);
+            }
+            50% {
+                transform: rotate(5deg);
+            }
         }
 
-        /* ========== FOREST DEPTH PARALLAX ========== */
+        /* ========== FOREST DEPTH PARALLAX (TREES ONLY) ========== */
         .forest-container {
             position: fixed;
             top: 0;
@@ -154,67 +134,52 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            transition: all 0.1s ease-out;
+            transition: transform 0.1s ease-out, opacity 0.2s ease-out;
         }
 
+        /* Background backing */
         .forest-bg {
-            background-image: url('images/tree_backing.jpeg');
-            background-size: cover;
-            background-position: center;
-            opacity: 0.8;
+            background-image: url("images/tree_backing.jpeg");
+            opacity: 0.9;
         }
 
+        /* Far trees */
         .forest-far {
-            background-image: url('images/layer2_left.png'), url('images/layer2_right.png');
-            background-position: left bottom, right bottom;
-            background-size: 45% auto, 45% auto;
-            background-repeat: no-repeat;
+            background-image: url("images/trees2.png");
+            background-position: center bottom;
+            background-size: auto 90%;
             opacity: 0.7;
         }
 
-        .forest-trees {
-            background-image: url('images/trees2.png'), url('images/trees1.png'), url('images/trees3.png');
-            background-position: left bottom, right bottom, right bottom;
-            background-size: auto 100%, auto 100%, auto 100%;
-            background-repeat: no-repeat;
-            opacity: 0.8;
-        }
-
+        /* Mid trees */
         .forest-mid {
-            background-image: url('images/layer1_left.png'), url('images/layer1_right.png');
-            background-position: left bottom, right bottom;
-            background-size: 45% auto, 45% auto;
-            background-repeat: no-repeat;
+            background-image: url("images/trees1.png");
+            background-position: center bottom;
+            background-size: auto 100%;
             opacity: 0.85;
         }
 
+        /* Near trees */
         .forest-near {
-            background-image: url('images/layer1_left.png'), url('images/layer1_right.png');
-            background-position: left bottom, right bottom;
-            background-size: 50% auto, 50% auto;
-            background-repeat: no-repeat;
-            opacity: 0.6;
+            background-image: url("images/trees3.png");
+            background-position: center bottom;
+            background-size: auto 110%;
+            opacity: 0.9;
         }
 
-        .forest-foreground {
-            background-image: url('images/layer2_left.png'), url('images/layer2_right.png');
-            background-position: left bottom, right bottom;
-            background-size: 55% auto, 55% auto;
-            background-repeat: no-repeat;
-            opacity: 0.5;
-        }
-
-        /* ========== FLOATING PARTICLES ========== */
+        /* Floating particles */
         .particle {
             position: fixed;
             pointer-events: none;
             opacity: 0.6;
             font-size: 20px;
             animation: particleFloat 8s ease-in-out infinite;
+            z-index: 10;
         }
 
         @keyframes particleFloat {
-            0%, 100% {
+            0%,
+            100% {
                 transform: translateY(0) translateX(0) rotate(0deg);
                 opacity: 0.3;
             }
@@ -224,12 +189,13 @@
             }
         }
 
-        /* ========== CONTENT LAYOUT ========== */
+        /* ========== CONTENT WRAPPER ========== */
         .content {
             position: relative;
             z-index: 1;
         }
 
+        /* Hero */
         .hero {
             height: 100vh;
             display: flex;
@@ -245,7 +211,7 @@
             text-align: center;
             z-index: 10;
             animation: floatIn 2s ease-out;
-            text-shadow: 2px 2px 20px rgba(0,0,0,0.5);
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.5);
         }
 
         .floating-flower {
@@ -263,10 +229,16 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(10deg);
+            }
         }
 
+        /* Sections */
         section {
             min-height: 100vh;
             padding: 100px 50px;
@@ -285,11 +257,11 @@
         }
 
         .section-title::after {
-            content: '🌿';
+            content: "🌿";
             margin-left: 15px;
         }
 
-        /* ========== PHOTOGRAPHY ========== */
+        /* Photography grid */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -299,11 +271,11 @@
         }
 
         .photo-item {
-            aspect-ratio: 4/3;
+            aspect-ratio: 4 / 3;
             background: #fff;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
             display: flex;
             align-items: center;
@@ -314,10 +286,10 @@
 
         .photo-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
-        /* ========== DRAWINGS ========== */
+        /* Drawings - scattered */
         .drawings-container {
             position: relative;
             min-height: 80vh;
@@ -334,15 +306,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transition: all 0.5s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
             font-size: 14px;
             color: #666;
             z-index: 1;
         }
 
+        .drawing-item img {
+            max-width: 80%;
+            max-height: 80%;
+            object-fit: contain;
+        }
+
         .drawing-item:hover {
-            transform: scale(1.15) rotate(5deg);
             z-index: 100;
         }
 
@@ -358,13 +335,15 @@
         .drawing-item:nth-child(10) { top: 35%; right: 35%; }
         .drawing-item:nth-child(11) { top: 55%; left: 70%; }
 
-        /* ========== TATTOO SCROLLER ========== */
+        /* Tattoo infinite scroll - auto + manual horizontal scroll */
         .infinite-scroll {
-            overflow: hidden;
+            overflow-x: auto;
+            overflow-y: hidden;
             padding: 40px 0;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.15);
             margin: 40px 0;
             border-radius: 20px;
+            -webkit-overflow-scrolling: touch;
         }
 
         .scroll-content {
@@ -381,7 +360,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             flex-shrink: 0;
             font-size: 14px;
             color: #666;
@@ -389,12 +368,23 @@
             padding: 20px;
         }
 
-        @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+        .scroll-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
         }
 
-        /* ========== MUSIC ========== */
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Music */
         .music-player {
             max-width: 800px;
             margin: 0 auto;
@@ -405,7 +395,8 @@
             padding: 20px;
             margin: 20px 0;
             border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            color: #1a1a1a;
         }
 
         .music-item h3 {
@@ -413,7 +404,7 @@
             margin-bottom: 10px;
         }
 
-        /* ========== PAPERS ========== */
+        /* Papers */
         .papers-list {
             max-width: 800px;
             margin: 0 auto;
@@ -426,6 +417,7 @@
             border-radius: 10px;
             border-left: 4px solid #7d9b6f;
             transition: transform 0.2s ease;
+            color: #1a1a1a;
         }
 
         .paper-item:hover {
@@ -443,7 +435,7 @@
             text-decoration: underline;
         }
 
-        /* ========== BLOOM ANIMATIONS ========== */
+        /* Blooms */
         .bloom {
             position: absolute;
             font-size: 30px;
@@ -462,7 +454,7 @@
             }
         }
 
-        /* ========== FISH (if you re-add) ========== */
+        /* Fish skeletons (if used later) */
         .fish {
             position: fixed;
             width: 80px;
@@ -473,35 +465,18 @@
             filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
         }
 
-        @keyframes swim1 {
-            0% { left: -100px; top: 20%; }
-            100% { left: 110%; top: 25%; }
-        }
-
-        @keyframes swim2 {
-            0% { right: -100px; top: 40%; }
-            100% { right: 110%; top: 35%; }
-        }
-
-        @keyframes swim3 {
-            0% { left: -100px; top: 60%; }
-            100% { left: 110%; top: 65%; }
-        }
-
         .fish.active {
             opacity: 0.6;
         }
     </style>
 </head>
 <body>
-    <!-- Fixed Forest Background with Depth -->
+    <!-- Forest background -->
     <div class="forest-container">
         <div class="forest-layer forest-bg"></div>
         <div class="forest-layer forest-far"></div>
-        <div class="forest-layer forest-trees"></div>
         <div class="forest-layer forest-mid"></div>
         <div class="forest-layer forest-near"></div>
-        <div class="forest-layer forest-foreground"></div>
     </div>
 
     <!-- Floating particles -->
@@ -510,9 +485,9 @@
     <div class="particle" style="left: 30%; top: 60%; animation-delay: 4s;">🍂</div>
     <div class="particle" style="left: 70%; top: 30%; animation-delay: 6s;">🌾</div>
 
-    <!-- Persistent cursor (always visible) -->
+    <!-- Custom cursor core -->
     <div id="cursor-core">
-        <img src="images/anemone1.png" alt="cursor">
+        <img src="images/anemone3.png" alt="cursor" />
     </div>
 
     <!-- Leaf Navigation -->
@@ -544,16 +519,16 @@
         <section class="hero" style="background: transparent;">
             <h1>welcome to my garden</h1>
             <div class="floating-flower" style="left: 20%; top: 20%;">
-                <img src="images/anemone1.png" alt="flower">
+                <img src="images/anemone1.png" alt="flower" />
             </div>
             <div class="floating-flower" style="right: 25%; top: 30%; animation-delay: 1s;">
-                <img src="images/anemone2.png" alt="flower">
+                <img src="images/anemone2.png" alt="flower" />
             </div>
             <div class="floating-flower" style="left: 60%; bottom: 30%; animation-delay: 2s;">
-                <img src="images/anemone3.png" alt="flower">
+                <img src="images/anemone3.png" alt="flower" />
             </div>
             <div class="floating-flower" style="right: 15%; bottom: 20%; animation-delay: 1.5s;">
-                <img src="images/anemone1.png" alt="flower">
+                <img src="images/anemone1.png" alt="flower" />
             </div>
         </section>
 
@@ -561,17 +536,17 @@
         <section id="drawings">
             <h2 class="section-title">funny drawings</h2>
             <div class="drawings-container">
-                <div class="drawing-item"><img src="images/fiskelet1.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="fish skeleton"></div>
-                <div class="drawing-item"><img src="images/fiskelet2.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="fish skeleton"></div>
-                <div class="drawing-item"><img src="images/fiskelet3.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="fish skeleton"></div>
-                <div class="drawing-item"><img src="images/face1.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="face drawing"></div>
-                <div class="drawing-item"><img src="images/balloonflower.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="balloon flower"></div>
-                <div class="drawing-item"><img src="images/lily.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="lily"></div>
-                <div class="drawing-item"><img src="images/liquidgold.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="liquid gold"></div>
-                <div class="drawing-item"><img src="images/littleman.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="little man"></div>
-                <div class="drawing-item"><img src="images/oupy.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="oupy"></div>
-                <div class="drawing-item"><img src="images/smoke.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="smoke"></div>
-                <div class="drawing-item"><img src="images/nasturtiums_1.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="nasturtiums"></div>
+                <div class="drawing-item"><img src="images/fiskelet1.png" alt="fish skeleton" /></div>
+                <div class="drawing-item"><img src="images/fiskelet2.png" alt="fish skeleton" /></div>
+                <div class="drawing-item"><img src="images/fiskelet3.png" alt="fish skeleton" /></div>
+                <div class="drawing-item"><img src="images/face1.png" alt="face drawing" /></div>
+                <div class="drawing-item"><img src="images/balloonflower.png" alt="balloon flower" /></div>
+                <div class="drawing-item"><img src="images/lily.png" alt="lily" /></div>
+                <div class="drawing-item"><img src="images/liquidgold.png" alt="liquid gold" /></div>
+                <div class="drawing-item"><img src="images/littleman.png" alt="little man" /></div>
+                <div class="drawing-item"><img src="images/oupy.png" alt="oupy" /></div>
+                <div class="drawing-item"><img src="images/smoke.png" alt="smoke" /></div>
+                <div class="drawing-item"><img src="images/nasturtiums_1.png" alt="nasturtiums" /></div>
             </div>
         </section>
 
@@ -593,21 +568,21 @@
             <h2 class="section-title">tattoo work</h2>
             <div class="infinite-scroll">
                 <div class="scroll-content">
-                    <div class="scroll-item"><img src="tats/tat1.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
-                    <div class="scroll-item"><img src="tats/tat2.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
-                    <div class="scroll-item"><img src="tats/tat3.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
-                    <div class="scroll-item"><img src="tats/tat4.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
-                    <div class="scroll-item"><img src="tats/tat5.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
-                    <div class="scroll-item"><img src="tats/tat6.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
-                    <div class="scroll-item"><img src="tats/tat7.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="tats/tat1.jpg" alt="tattoo" /></div>
+                    <div class="scroll-item"><img src="tats/tat2.jpg" alt="tattoo" /></div>
+                    <div class="scroll-item"><img src="tats/tat3.jpg" alt="tattoo" /></div>
+                    <div class="scroll-item"><img src="tats/tat4.jpg" alt="tattoo" /></div>
+                    <div class="scroll-item"><img src="tats/tat5.jpg" alt="tattoo" /></div>
+                    <div class="scroll-item"><img src="tats/tat6.jpg" alt="tattoo" /></div>
+                    <div class="scroll-item"><img src="tats/tat7.png" alt="tattoo" /></div>
                     <!-- Duplicated for seamless loop -->
-                    <div class="scroll-item"><img src="tats/tat1.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
-                    <div class="scroll-item"><img src="tats/tat2.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
-                    <div class="scroll-item"><img src="tats/tat3.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
-                    <div class="scroll-item"><img src="tats/tat4.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
-                    <div class="scroll-item"><img src="tats/tat5.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
-                    <div class="scroll-item"><img src="tats/tat6.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
-                    <div class="scroll-item"><img src="tats/tat7.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="tats/tat1.jpg" alt="tattoo" /></div>
+                    <div class="scroll-item"><img src="tats/tat2.jpg" alt="tattoo" /></div>
+                    <div class="scroll-item"><img src="tats/tat3.jpg" alt="tattoo" /></div>
+                    <div class="scroll-item"><img src="tats/tat4.jpg" alt="tattoo" /></div>
+                    <div class="scroll-item"><img src="tats/tat5.jpg" alt="tattoo" /></div>
+                    <div class="scroll-item"><img src="tats/tat6.jpg" alt="tattoo" /></div>
+                    <div class="scroll-item"><img src="tats/tat7.png" alt="tattoo" /></div>
                 </div>
             </div>
         </section>
@@ -618,26 +593,40 @@
             <div class="music-player">
                 <div class="music-item">
                     <h3>Snow Day Song</h3>
-                    <p>My high school senior project was creating these improvised, layered tracks. Since I
-                    graduated in the class of 2020, we needed to collaborate remotely, passing wav files back
-                    and forth. Guitar and vocals by Alexis Chang. Other random stuff &amp; mastering by my
-                    wonderful mentor, Ian Guthrie. </p>
+                    <p>
+                        My high school senior project was creating these improvised, layered tracks. Since I
+                        graduated in the class of 2020, we needed to collaborate remotely, passing wav files back
+                        and forth. Guitar and vocals by Alexis Chang. Other random stuff &amp; mastering by my
+                        wonderful mentor, Ian Guthrie.
+                    </p>
                     <audio controls style="width: 100%;">
-                        <source src="audio/Snow Day Song.mp3" type="audio/mpeg">
+                        <source src="audio/Snow Day Song.mp3" type="audio/mpeg" />
                     </audio>
                 </div>
                 <div class="music-item">
                     <h3>Story of a Traveler</h3>
-                    <p>Also created in 2020 as a collaboration with Ian Guthrie, who mastered it along with
-                    contributing some really awesome percussion and oriental sounds.</p>
+                    <p>
+                        Also created in 2020 as a collaboration with Ian Guthrie, who mastered it along with
+                        contributing some really awesome percussion and oriental sounds.
+                    </p>
                     <audio controls style="width: 100%;">
-                        <source src="audio/Story of a Traveler.mp3" type="audio/mpeg">
+                        <source src="audio/Story of a Traveler.mp3" type="audio/mpeg" />
                     </audio>
                 </div>
                 <div class="music-item">
                     <h3>Antediluvian from "Motes" by Pocket Jazz</h3>
                     <p>Ian's track, I helped a little.</p>
-                    <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/2s2VjNU4szZDA6C8r48ZkS?utm_source=generator&amp;theme=0" width="100%" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                    <iframe
+                        data-testid="embed-iframe"
+                        style="border-radius: 12px"
+                        src="https://open.spotify.com/embed/track/2s2VjNU4szZDA6C8r48ZkS?utm_source=generator&theme=0"
+                        width="100%"
+                        height="352"
+                        frameborder="0"
+                        allowfullscreen=""
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                        loading="lazy"
+                    ></iframe>
                 </div>
             </div>
         </section>
@@ -663,133 +652,97 @@
     </div>
 
     <script>
-        // ===== PERSISTENT CURSOR + TRAIL (always anemone1) =====
-        const cursorCore = document.getElementById('cursor-core');
-
-        document.addEventListener('mousemove', (e) => {
-            const x = e.pageX;
-            const y = e.pageY;
-
-            // move main cursor
-            cursorCore.style.left = x + 'px';
-            cursorCore.style.top = y + 'px';
-
-            // create trailing flower
-            const flower = document.createElement('div');
-            flower.className = 'cursor-trail';
-            flower.innerHTML = '<img src="images/anemone1.png" alt="flower">';
-            flower.style.left = x + 'px';
-            flower.style.top = y + 'px';
-            document.body.appendChild(flower);
-
-            setTimeout(() => flower.remove(), 1000);
+        // ===== Persistent custom cursor (anemone3) =====
+        const cursorCore = document.getElementById("cursor-core");
+        document.addEventListener("mousemove", (e) => {
+            cursorCore.style.left = e.clientX + "px";
+            cursorCore.style.top = e.clientY + "px";
         });
 
-        // ===== DEPTH PARALLAX =====
-        window.addEventListener('scroll', () => {
-            const scrollY = window.pageYOffset;
+        // ===== Forest parallax (using only trees) =====
+        window.addEventListener("scroll", () => {
+            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
             const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
             const scrollProgress = maxScroll > 0 ? scrollY / maxScroll : 0;
 
-            const maxSpread = 1200;
+            const bgLayer = document.querySelector(".forest-bg");
+            const farLayer = document.querySelector(".forest-far");
+            const midLayer = document.querySelector(".forest-mid");
+            const nearLayer = document.querySelector(".forest-near");
 
-            const bgLayer = document.querySelector('.forest-bg');
-            const farLayer = document.querySelector('.forest-far');
-            const treesLayer = document.querySelector('.forest-trees');
-            const midLayer = document.querySelector('.forest-mid');
-            const nearLayer = document.querySelector('.forest-near');
-            const foregroundLayer = document.querySelector('.forest-foreground');
-            const container = document.querySelector('.forest-container');
+            const maxShift = 80; // px horizontal drift
 
+            // Background slightly darkens
             if (bgLayer) {
-                bgLayer.style.opacity = Math.max(0.6, 0.8 - scrollProgress * 0.2);
+                bgLayer.style.opacity = String(0.9 - scrollProgress * 0.2);
             }
 
             if (farLayer) {
-                const farSpread = scrollProgress * maxSpread * 0.4;
-                const farScale = 1 + (scrollProgress * 0.1);
-                farLayer.style.backgroundPosition = `${-farSpread}px bottom, calc(100% + ${farSpread}px) bottom`;
-                farLayer.style.backgroundSize = `${45 * farScale}% auto, ${45 * farScale}% auto`;
-            }
-
-            if (treesLayer) {
-                const treesSpread = scrollProgress * maxSpread * 0.6;
-                treesLayer.style.backgroundPosition = `${-treesSpread}px bottom, calc(100% + ${treesSpread}px) bottom, calc(100% + ${treesSpread}px) bottom`;
-                treesLayer.style.backgroundSize = `auto 100%, auto 100%, auto 100%`;
+                const farShift = maxShift * scrollProgress * 0.4;
+                farLayer.style.transform = `translateX(${-farShift}px)`;
             }
 
             if (midLayer) {
-                const midSpread = scrollProgress * maxSpread * 0.8;
-                const midScale = 1 + (scrollProgress * 0.15);
-                midLayer.style.backgroundPosition = `${-midSpread}px bottom, calc(100% + ${midSpread}px) bottom`;
-                midLayer.style.backgroundSize = `${45 * midScale}% auto, ${45 * midScale}% auto`;
+                const midShift = maxShift * scrollProgress * 0.8;
+                midLayer.style.transform = `translateX(${midShift}px)`;
             }
 
             if (nearLayer) {
-                const nearSpread = scrollProgress * maxSpread * 1.3;
-                const nearScale = 1 + (scrollProgress * 0.25);
-                nearLayer.style.backgroundPosition = `${-nearSpread}px bottom, calc(100% + ${nearSpread}px) bottom`;
-                nearLayer.style.backgroundSize = `${50 * nearScale}% auto, ${50 * nearScale}% auto`;
-            }
-
-            if (foregroundLayer) {
-                const foreSpread = scrollProgress * maxSpread * 2;
-                const foreScale = 1 + (scrollProgress * 0.4);
-                foregroundLayer.style.backgroundPosition = `${-foreSpread}px bottom, calc(100% + ${foreSpread}px) bottom`;
-                foregroundLayer.style.backgroundSize = `${55 * foreScale}% auto, ${55 * foreScale}% auto`;
-            }
-
-            if (container) {
-                container.style.filter = `brightness(${Math.max(0.6, 1 - scrollProgress * 0.4)})`;
+                const nearShift = maxShift * scrollProgress * 1.2;
+                nearLayer.style.transform = `translateX(${-nearShift}px)`;
             }
         });
 
-        // ===== BLOOM FLOWERS ON SCROLL =====
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    for (let i = 0; i < 3; i++) {
-                        setTimeout(() => {
-                            const flower = document.createElement('div');
-                            flower.className = 'bloom';
-                            flower.textContent = ['🌸', '🌼', '🌺'][Math.floor(Math.random() * 3)];
-                            flower.style.left = Math.random() * 90 + '%';
-                            flower.style.top = Math.random() * 80 + 20 + '%';
-                            entry.target.appendChild(flower);
+        // ===== Bloom flowers when sections come into view =====
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        for (let i = 0; i < 3; i++) {
+                            setTimeout(() => {
+                                const flower = document.createElement("div");
+                                flower.className = "bloom";
+                                flower.textContent = ["🌸", "🌼", "🌺"][Math.floor(Math.random() * 3)];
+                                flower.style.left = Math.random() * 90 + "%";
+                                flower.style.top = Math.random() * 80 + 20 + "%";
+                                entry.target.appendChild(flower);
 
-                            setTimeout(() => flower.remove(), 2000);
-                        }, i * 300);
+                                setTimeout(() => flower.remove(), 2000);
+                            }, i * 300);
+                        }
                     }
-                }
-            });
-        }, { threshold: 0.3 });
+                });
+            },
+            { threshold: 0.3 }
+        );
 
-        document.querySelectorAll('section').forEach(section => {
+        document.querySelectorAll("section").forEach((section) => {
             observer.observe(section);
         });
 
-        // ===== SMOOTH SCROLL NAV =====
-        document.querySelectorAll('.leaf-link').forEach(link => {
-            link.addEventListener('click', (e) => {
+        // ===== Smooth scroll for leaf navigation =====
+        document.querySelectorAll(".leaf-link").forEach((link) => {
+            link.addEventListener("click", (e) => {
                 e.preventDefault();
-                const target = document.querySelector(link.getAttribute('href'));
+                const target = document.querySelector(link.getAttribute("href"));
                 if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
+                    target.scrollIntoView({ behavior: "smooth" });
                 }
             });
         });
 
-        // ===== DRAWINGS AVOID CURSOR =====
-        const drawings = document.querySelectorAll('.drawing-item');
+        // ===== Drawings avoid cursor (stronger movement) =====
+        const drawings = document.querySelectorAll(".drawing-item");
         let mouseX = 0;
         let mouseY = 0;
 
-        document.addEventListener('mousemove', (e) => {
+        document.addEventListener("mousemove", (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY + window.pageYOffset;
         });
 
         function updateDrawingPositions() {
+            const avoidDistance = 220; // bigger radius
             drawings.forEach((drawing) => {
                 const rect = drawing.getBoundingClientRect();
                 const drawingX = rect.left + rect.width / 2;
@@ -799,17 +752,16 @@
                 const deltaY = mouseY - drawingY;
                 const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-                const avoidDistance = 150;
-
                 if (distance < avoidDistance) {
                     const angle = Math.atan2(deltaY, deltaX);
-                    const pushDistance = (avoidDistance - distance) * 0.3;
-                    const offsetX = -Math.cos(angle) * pushDistance;
-                    const offsetY = -Math.sin(angle) * pushDistance;
+                    const pushStrength = (avoidDistance - distance) * 0.6; // stronger
+                    const offsetX = -Math.cos(angle) * pushStrength;
+                    const offsetY = -Math.sin(angle) * pushStrength;
 
-                    drawing.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(1.05)`;
+                    const extraScale = distance < 60 ? 1.2 : 1.05;
+                    drawing.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${extraScale})`;
                 } else {
-                    drawing.style.transform = 'translate(0, 0) scale(1)';
+                    drawing.style.transform = "translate(0, 0) scale(1)";
                 }
             });
 
