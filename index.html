@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Overgrown Garden</title>
+
+    <!-- CUSTOM FONTS -->
+    <style>
+        @font-face {
+            font-family: 'Wakupo';
+            src: url('fonts/wakupo.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'RobotoFlex';
+            src: url('https://fonts.gstatic.com/s/robotoflex/v7/NaPBcZ_gXG4SbG9Jl9zJfVL7G87dV0Jv.ttf') format('truetype');
+        }
+    </style>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'RobotoFlex', sans-serif;
+            background: #1a1a1a;
+            cursor: none !important;
+            overflow-x: hidden;
+        }
+
+        h1, h2, .section-title {
+            font-family: 'Wakupo', serif !important;
+        }
+
+        /* Custom Cursor (single image, no trail) */
+        #custom-cursor {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+        }
+
+        #custom-cursor img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* Leaf Navigation */
+        .leaf-nav {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .leaf-link {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .leaf-link:hover {
+            transform: scale(1.2) rotate(5deg);
+            animation: sway 0.5s ease-in-out infinite;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        /* Forest Depth Parallax */
+        .forest-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .forest-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: all 0.1s ease-out;
+        }
+
+        .forest-bg {
+            background-image: url('images/tree_backing.jpeg');
+            opacity: 0.8;
+        }
+
+        .forest-far {
+            background-image: url('images/layer2_left.png'), url('images/layer2_right.png');
+            background-position: left bottom, right bottom;
+            background-size: 45% auto, 45% auto;
+            background-repeat: no-repeat;
+            opacity: 0.7;
+        }
+
+        .forest-trees {
+            background-image: url('images/trees2.png'), url('images/trees1.png'), url('images/trees3.png');
+            background-position: left bottom, right bottom, right bottom;
+            background-size: auto 100%, auto 100%, auto 100%;
+            background-repeat: no-repeat;
+            opacity: 0.8;
+        }
+
+        .forest-mid {
+            background-image: url('images/layer1_left.png'), url('images/layer1_right.png');
+            background-position: left bottom, right bottom;
+            background-size: 45% auto, 45% auto;
+            background-repeat: no-repeat;
+            opacity: 0.85;
+        }
+
+        .forest-near {
+            background-image: url('images/layer1_left.png'), url('images/layer1_right.png');
+            background-position: left bottom, right bottom;
+            background-size: 50% auto, 50% auto;
+            background-repeat: no-repeat;
+            opacity: 0.6;
+        }
+
+        .forest-foreground {
+            background-image: url('images/layer2_left.png'), url('images/layer2_right.png');
+            background-position: left bottom, right bottom;
+            background-size: 55% auto, 55% auto;
+            background-repeat: no-repeat;
+            opacity: 0.5;
+        }
+
+        /* Content */
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            color: #e8f4d8;
+            text-align: center;
+            animation: floatIn 2s ease-out;
+            text-shadow: 2px 2px 20px rgba(0,0,0,0.5);
+        }
+
+        @keyframes floatIn {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .floating-flower {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            padding: 100px 50px;
+            background: transparent;
+        }
+
+        .section-title {
+            font-size: 48px;
+            color: #e8f4d8;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Drawings */
+        .drawings-container {
+            position: relative;
+            min-height: 80vh;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .drawing-item {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.5s ease;
+        }
+
+        /* Photography */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .photo-item {
+            aspect-ratio: 4/3;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Music */
+        .music-player { max-width: 800px; margin: 0 auto; }
+        .music-item {
+            background: rgba(255,255,255,0.8);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 15px;
+        }
+
+        /* Papers */
+        .paper-item {
+            background: rgba(255,255,255,0.8);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #7d9b6f;
+            transition: transform 0.2s ease;
+        }
+
+        .paper-item:hover { transform: translateX(10px); }
+
+    </style>
+</head>
+<body>
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"><img src="images/anemone3.png"></div>
+
+    <script>
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.pageX + 'px';
+            cursor.style.top = e.pageY + 'px';
+        });
+    </script>
+
+    <!-- Forest Background -->
+    <div class="forest-container">
+        <div class="forest-layer forest-bg"></div>
+        <div class="forest-layer forest-far"></div>
+        <div class="forest-layer forest-trees"></div>
+        <div class="forest-layer forest-mid"></div>
+        <div class="forest-layer forest-near"></div>
+        <div class="forest-layer forest-foreground"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="leaf-nav">
+        <a href="#drawings" class="leaf-link"><span style="font-size:28px;">🌿</span></a>
+        <a href="#photography" class="leaf-link"><span style="font-size:28px;">🍃</span></a>
+        <a href="#tattoos" class="leaf-link"><span style="font-size:28px;">🍂</span></a>
+        <a href="#music" class="leaf-link"><span style="font-size:28px;">🌾</span></a>
+        <a href="#papers" class="leaf-link"><span style="font-size:28px;">🍀</span></a>
+    </nav>
+
+    <div class="content">
+        <section class="hero">
+            <h1>welcome to my garden</h1>
+        </section>
+
+        <section id="drawings">
+            <h2 class="section-title">funny drawings</h2>
+            <div class="drawings-container"></div>
+        </section>
+
+        <section id="photography">
+            <h2 class="section-title">photography</h2>
+            <div class="photo-grid">
+                <div class="photo-item">photo 1</div>
+                <div class="photo-item">photo 2</div>
+            </div>
+        </section>
+    </div>
+
+</body>
+</html>
