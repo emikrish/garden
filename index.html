@@ -142,9 +142,9 @@
 
         /* Trees layer - new middle layer */
         .forest-trees {
-            background-image: url('images/trees1.png'), url('images/trees2.png');
-            background-position: left bottom, right bottom;
-            background-size: 40% auto, 40% auto;
+            background-image: url('images/trees2.png'), url('images/trees1.png'), url('images/trees3.png');
+            background-position: left bottom, right bottom, right bottom;
+            background-size: 40% auto, 40% auto, 40% auto;
             background-repeat: no-repeat;
             opacity: 0.8;
         }
@@ -698,8 +698,8 @@
             const treesLayer = document.querySelector('.forest-trees');
             const treesSpread = scrollProgress * maxSpread * 0.6;
             const treesScale = 1 + (scrollProgress * 0.12);
-            treesLayer.style.backgroundPosition = `${-treesSpread}px bottom, calc(100% + ${treesSpread}px) bottom`;
-            treesLayer.style.backgroundSize = `${40 * treesScale}% auto, ${40 * treesScale}% auto`;
+            treesLayer.style.backgroundPosition = `${-treesSpread}px bottom, calc(100% + ${treesSpread}px) bottom, calc(100% + ${treesSpread}px) bottom`;
+            treesLayer.style.backgroundSize = `${40 * treesScale}% auto, ${40 * treesScale}% auto, ${40 * treesScale}% auto`;
             
             // Layer 1 (mid) - spreads faster, slight scale
             const midLayer = document.querySelector('.forest-mid');
