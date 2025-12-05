@@ -658,43 +658,18 @@
         window.addEventListener("scroll", () => {
             const scrollY = window.pageYOffset;
             const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollProgress = scrollY / maxScroll;
+            const t = maxScroll > 0 ? scrollY / maxScroll : 0;
 
-            const maxSpread = 1200;
+            const far = document.querySelector('.forest-far');
+            const mid = document.querySelector('.forest-mid');
+            const near = document.querySelector('.forest-near');
+            const bg  = document.querySelector('.forest-bg');
 
-            const bgLayer = document.querySelector('.forest-bg');
-            const farLayer = document.querySelector('.forest-far');
-            const midLayer = document.querySelector('.forest-mid');
-            const nearLayer = document.querySelector('.forest-near');
+            if (bg) bg.style.opacity = 0.9 - t * 0.2;
 
-            // Background subtle fade
-            if (bgLayer) {
-                bgLayer.style.opacity = Math.max(0.6, 0.9 - scrollProgress * 0.3);
-            }
-
-            // Far layer
-            if (farLayer) {
-                const farSpread = scrollProgress * maxSpread * 0.4;
-                const farScale = 1 + (scrollProgress * 0.1);
-                farLayer.style.backgroundPosition = `${-farSpread}px bottom`;
-                farLayer.style.backgroundSize = `${45 * farScale}% auto`;
-            }
-
-            // Mid layer
-            if (midLayer) {
-                const midSpread = scrollProgress * maxSpread * 0.75;
-                const midScale = 1 + (scrollProgress * 0.15);
-                midLayer.style.backgroundPosition = `${midSpread}px bottom`;
-                midLayer.style.backgroundSize = `${50 * midScale}% auto`;
-            }
-
-            // Near layer
-            if (nearLayer) {
-                const nearSpread = scrollProgress * maxSpread * 1.3;
-                const nearScale = 1 + (scrollProgress * 0.25);
-                nearLayer.style.backgroundPosition = `${-nearSpread}px bottom`;
-                nearLayer.style.backgroundSize = `${60 * nearScale}% auto`;
-            }
+            if (far) far.style.transform = `translateX(${t * -80}px)`;
+            if (mid) mid.style.transform = `translateX(${t * 140}px)`;
+            if (near) near.style.transform = `translateX(${t * -220}px)`;
         });
 
         updateDrawingPositions() {
