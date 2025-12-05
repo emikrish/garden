@@ -1,0 +1,798 @@
+@keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Overgrown Garden</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: #1a1a1a;
+            cursor: none !important;
+            overflow-x: hidden;
+        }
+
+        * {
+            cursor: none !important;
+        }
+
+        /* Custom Cursor */
+        .cursor-trail {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            animation: fadeOut 1s forwards;
+        }
+
+        .cursor-trail img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateY(-20px) rotate(20deg);
+            }
+        }
+
+        /* Leaf Navigation */
+        .leaf-nav {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .leaf-link {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+
+        .leaf-link img {
+            width: 35px;
+            height: 35px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .leaf-link:hover {
+            transform: scale(1.2) rotate(5deg);
+            animation: sway 0.5s ease-in-out infinite;
+        }
+
+        .leaf-label {
+            position: absolute;
+            right: 45px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            color: #2d5016;
+            font-family: 'Courier New', monospace;
+            border: 1px solid #7d9b6f;
+        }
+
+        .leaf-link:hover .leaf-label {
+            opacity: 1;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        /* Forest Depth Parallax */
+        .forest-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .forest-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: all 0.1s ease-out;
+        }
+
+        /* Background - furthest back */
+        .forest-bg {
+            background-image: url('images/tree_backing.jpeg');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.8;
+        }
+
+        /* Layer 2 - far back (your layer2 images) */
+        .forest-far {
+            background-image: url('images/layer2_left.png'), url('images/layer2_right.png');
+            background-position: left bottom, right bottom;
+            background-size: 45% auto, 45% auto;
+            background-repeat: no-repeat;
+            opacity: 0.7;
+        }
+
+        /* Trees layer - new middle layer */
+        .forest-trees {
+            background-image: url('images/trees2.png'), url('images/trees1.png'), url('images/trees3.png');
+            background-position: left bottom, right bottom, right bottom;
+            background-size: auto 100%, auto 100%, auto 100%;
+            background-repeat: no-repeat;
+            opacity: 0.8;
+        }
+
+        /* Layer 1 - closer (your layer1 images) */
+        .forest-mid {
+            background-image: url('images/layer1_left.png'), url('images/layer1_right.png');
+            background-position: left bottom, right bottom;
+            background-size: 45% auto, 45% auto;
+            background-repeat: no-repeat;
+            opacity: 0.85;
+        }
+
+        /* Close foliage - can reuse layer1 at different scale */
+        .forest-near {
+            background-image: url('images/layer1_left.png'), url('images/layer1_right.png');
+            background-position: left bottom, right bottom;
+            background-size: 50% auto, 50% auto;
+            background-repeat: no-repeat;
+            opacity: 0.6;
+        }
+
+        /* Foreground elements - layer2 scaled larger */
+        .forest-foreground {
+            background-image: url('images/layer2_left.png'), url('images/layer2_right.png');
+            background-position: left bottom, right bottom;
+            background-size: 55% auto, 55% auto;
+            background-repeat: no-repeat;
+            opacity: 0.5;
+        }
+
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0.6;
+            font-size: 20px;
+            animation: particleFloat 8s ease-in-out infinite;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { 
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translateY(-30px) translateX(20px) rotate(180deg);
+                opacity: 0.7;
+            }
+        }
+
+        /* Content container */
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero h1 {
+            font-size: 72px;
+            color: #e8f4d8;
+            text-align: center;
+            z-index: 10;
+            animation: floatIn 2s ease-out;
+            text-shadow: 2px 2px 20px rgba(0,0,0,0.5);
+        }
+
+        .floating-flower {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            animation: float 6s ease-in-out infinite;
+            opacity: 0.7;
+        }
+
+        .floating-flower img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            padding: 100px 50px;
+            position: relative;
+            background: transparent;
+            margin: 20px 0;
+        }
+
+        .section-title {
+            font-size: 48px;
+            color: #e8f4d8;
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        }
+
+        .section-title::after {
+            content: '🌿';
+            margin-left: 15px;
+        }
+
+        /* Photography Section - Minimal */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .photo-item {
+            aspect-ratio: 4/3;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-style: italic;
+        }
+
+        .photo-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Drawings - Scattered Vibe */
+        .drawings-container {
+            position: relative;
+            min-height: 80vh;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .drawing-item {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.5s ease;
+            font-size: 14px;
+            color: #666;
+            z-index: 1;
+        }
+
+        .drawing-item:hover {
+            transform: scale(1.15) rotate(5deg);
+            z-index: 100;
+        }
+
+        .drawing-item:nth-child(1) { top: 10%; left: 10%; }
+        .drawing-item:nth-child(2) { top: 20%; right: 15%; }
+        .drawing-item:nth-child(3) { top: 50%; left: 20%; }
+        .drawing-item:nth-child(4) { top: 60%; right: 25%; }
+        .drawing-item:nth-child(5) { top: 30%; left: 50%; }
+        .drawing-item:nth-child(6) { top: 70%; left: 40%; }
+        .drawing-item:nth-child(7) { top: 15%; left: 60%; }
+        .drawing-item:nth-child(8) { top: 45%; right: 10%; }
+        .drawing-item:nth-child(9) { top: 80%; left: 15%; }
+        .drawing-item:nth-child(10) { top: 35%; right: 35%; }
+        .drawing-item:nth-child(11) { top: 55%; left: 70%; }
+
+        /* Horizontal Infinite Scroll */
+        .infinite-scroll {
+            overflow: hidden;
+            padding: 40px 0;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 40px 0;
+            border-radius: 20px;
+        }
+
+        .scroll-content {
+            display: flex;
+            animation: scroll 30s linear infinite;
+        }
+
+        .scroll-item {
+            min-width: 250px;
+            height: 250px;
+            margin: 0 20px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Music Section */
+        .music-player {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .music-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .music-item h3 {
+            color: #2d5016;
+            margin-bottom: 10px;
+        }
+
+        /* Papers Section */
+        .papers-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .paper-item {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 4px solid #7d9b6f;
+            transition: transform 0.2s ease;
+        }
+
+        .paper-item:hover {
+            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .paper-item a {
+            color: #2d5016;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .paper-item a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animated Elements */
+        .bloom {
+            position: absolute;
+            font-size: 30px;
+            opacity: 0;
+            animation: bloom 2s ease-out forwards;
+        }
+
+        @keyframes bloom {
+            from {
+                opacity: 0;
+                transform: scale(0) rotate(0deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(360deg);
+            }
+        }
+
+        /* Swimming Fish Skeletons */
+        .fish {
+            position: fixed;
+            width: 80px;
+            height: auto;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 500;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+        }
+
+        @keyframes swim1 {
+            0% {
+                left: -100px;
+                top: 20%;
+            }
+            100% {
+                left: 110%;
+                top: 25%;
+            }
+        }
+
+        @keyframes swim2 {
+            0% {
+                right: -100px;
+                top: 40%;
+            }
+            100% {
+                right: 110%;
+                top: 35%;
+            }
+        }
+
+        @keyframes swim3 {
+            0% {
+                left: -100px;
+                top: 60%;
+            }
+            100% {
+                left: 110%;
+                top: 65%;
+            }
+        }
+
+        .fish.active {
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fixed Forest Background with Depth -->
+    <div class="forest-container">
+        <div class="forest-layer forest-bg"></div>
+        <div class="forest-layer forest-far"></div>
+        <div class="forest-layer forest-trees"></div>
+        <div class="forest-layer forest-mid"></div>
+        <div class="forest-layer forest-near"></div>
+        <div class="forest-layer forest-foreground"></div>
+    </div>
+
+    <!-- Floating particles -->
+    <div class="particle" style="left: 10%; top: 20%; animation-delay: 0s;">🍃</div>
+    <div class="particle" style="left: 80%; top: 40%; animation-delay: 2s;">🌿</div>
+    <div class="particle" style="left: 30%; top: 60%; animation-delay: 4s;">🍂</div>
+    <div class="particle" style="left: 70%; top: 30%; animation-delay: 6s;">🌾</div>
+
+    <!-- Swimming Fish Skeletons -->
+    <!-- Removed - now static in drawings section -->
+
+    <!-- Leaf Navigation -->
+    <nav class="leaf-nav">
+        <a href="#drawings" class="leaf-link">
+            <span style="font-size: 28px;">🌿</span>
+            <span class="leaf-label">funny drawings</span>
+        </a>
+        <a href="#photography" class="leaf-link">
+            <span style="font-size: 28px;">🍃</span>
+            <span class="leaf-label">photography</span>
+        </a>
+        <a href="#tattoos" class="leaf-link">
+            <span style="font-size: 28px;">🍂</span>
+            <span class="leaf-label">tattoo work</span>
+        </a>
+        <a href="#music" class="leaf-link">
+            <span style="font-size: 28px;">🌾</span>
+            <span class="leaf-label">music</span>
+        </a>
+        <a href="#papers" class="leaf-link">
+            <span style="font-size: 28px;">🍀</span>
+            <span class="leaf-label">science stuff</span>
+        </a>
+    </nav>
+
+    <div class="content">
+        <!-- Hero Section -->
+        <section class="hero" style="background: transparent;">
+            <h1>welcome to my garden</h1>
+            <div class="floating-flower" style="left: 20%; top: 20%;">
+                <img src="images/anemone1.png" alt="flower">
+            </div>
+            <div class="floating-flower" style="right: 25%; top: 30%; animation-delay: 1s;">
+                <img src="images/anemone2.png" alt="flower">
+            </div>
+            <div class="floating-flower" style="left: 60%; bottom: 30%; animation-delay: 2s;">
+                <img src="images/anemone3.png" alt="flower">
+            </div>
+            <div class="floating-flower" style="right: 15%; bottom: 20%; animation-delay: 1.5s;">
+                <img src="images/anemone1.png" alt="flower">
+            </div>
+        </section>
+
+        <!-- Drawings Section -->
+        <section id="drawings">
+            <h2 class="section-title">funny drawings</h2>
+            <div class="drawings-container">
+                <div class="drawing-item"><img src="images/fiskelet1.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="fish skeleton"></div>
+                <div class="drawing-item"><img src="images/fiskelet2.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="fish skeleton"></div>
+                <div class="drawing-item"><img src="images/fiskelet3.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="fish skeleton"></div>
+                <div class="drawing-item"><img src="images/face1.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="face drawing"></div>
+                <div class="drawing-item"><img src="images/balloonflower.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="balloon flower"></div>
+                <div class="drawing-item"><img src="images/lily.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="lily"></div>
+                <div class="drawing-item"><img src="images/liquidgold.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="liquid gold"></div>
+                <div class="drawing-item"><img src="images/littleman.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="little man"></div>
+                <div class="drawing-item"><img src="images/oupy.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="oupy"></div>
+                <div class="drawing-item"><img src="images/smoke.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="smoke"></div>
+                <div class="drawing-item"><img src="images/nasturtiums_1.png" style="max-width: 80%; max-height: 80%; object-fit: contain;" alt="nasturtiums"></div>
+            </div>
+        </section>
+
+        <!-- Photography Section -->
+        <section id="photography">
+            <h2 class="section-title">photography</h2>
+            <div class="photo-grid">
+                <div class="photo-item">photo 1</div>
+                <div class="photo-item">photo 2</div>
+                <div class="photo-item">photo 3</div>
+                <div class="photo-item">photo 4</div>
+                <div class="photo-item">photo 5</div>
+                <div class="photo-item">photo 6</div>
+            </div>
+        </section>
+
+        <!-- Tattoos Section -->
+        <section id="tattoos">
+            <h2 class="section-title">tattoo work</h2>
+            <div class="infinite-scroll">
+                <div class="scroll-content">
+                    <div class="scroll-item"><img src="images/tat1.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat2.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat3.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat4.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat5.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat6.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat7.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <!-- Duplicated for seamless loop -->
+                    <div class="scroll-item"><img src="images/tat1.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat2.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat3.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat4.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat5.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat6.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat7.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Music Section -->
+        <section id="music">
+            <h2 class="section-title">music i've made</h2>
+            <div class="music-player">
+                <div class="music-item">
+                    <h3>Song Title 1</h3>
+                    <audio controls style="width: 100%;">
+                        <source src="your-song.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
+                <div class="music-item">
+                    <h3>Song Title 2</h3>
+                    <p>🎵 <a href="https://soundcloud.com/yourusername" target="_blank">Listen on SoundCloud</a></p>
+                </div>
+                <div class="music-item">
+                    <h3>Song Title 3</h3>
+                    <p>🎵 <a href="https://open.spotify.com/artist/yourid" target="_blank">Listen on Spotify</a></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Science Papers Section -->
+        <section id="papers">
+            <h2 class="section-title">science stuff</h2>
+            <div class="papers-list">
+                <div class="paper-item">
+                    <a href="https://arxiv.org/your-paper" target="_blank">Interesting Paper Title 1</a>
+                </div>
+                <div class="paper-item">
+                    <a href="https://arxiv.org/your-paper" target="_blank">Interesting Paper Title 2</a>
+                </div>
+                <div class="paper-item">
+                    <a href="https://arxiv.org/your-paper" target="_blank">Interesting Paper Title 3</a>
+                </div>
+                <div class="paper-item">
+                    <a href="https://arxiv.org/your-paper" target="_blank">Interesting Paper Title 4</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Custom Cursor Trail with flower images
+        document.addEventListener('mousemove', (e) => {
+            const flowers = ['images/anemone1.png', 'images/anemone2.png', 'images/anemone3.png'];
+            
+            const flower = document.createElement('div');
+            flower.className = 'cursor-trail';
+            flower.innerHTML = `<img src="${flowers[Math.floor(Math.random() * flowers.length)]}" alt="flower">`;
+            
+            flower.style.left = e.pageX + 'px';
+            flower.style.top = e.pageY + 'px';
+            document.body.appendChild(flower);
+            
+            setTimeout(() => flower.remove(), 1000);
+        });
+
+        // DEPTH PARALLAX - Walking between layers into the forest
+        window.addEventListener('scroll', () => {
+            const scrollY = window.pageYOffset;
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollProgress = scrollY / maxScroll;
+            
+            // Calculate how far each layer should move to the sides (in pixels)
+            const maxSpread = 1200; // Maximum distance layers spread horizontally
+            
+            // Background - your tree_backing.jpeg stays mostly fixed
+            const bgLayer = document.querySelector('.forest-bg');
+            bgLayer.style.opacity = Math.max(0.6, 0.8 - scrollProgress * 0.2);
+            
+            // Layer 2 (far) - spreads slowly, minimal scale
+            const farLayer = document.querySelector('.forest-far');
+            const farSpread = scrollProgress * maxSpread * 0.4;
+            const farScale = 1 + (scrollProgress * 0.1);
+            farLayer.style.backgroundPosition = `${-farSpread}px bottom, calc(100% + ${farSpread}px) bottom`;
+            farLayer.style.backgroundSize = `${45 * farScale}% auto, ${45 * farScale}% auto`;
+            
+            // Trees layer - spreads at medium speed
+            const treesLayer = document.querySelector('.forest-trees');
+            const treesSpread = scrollProgress * maxSpread * 0.6;
+            const treesScale = 1 + (scrollProgress * 0.12);
+            treesLayer.style.backgroundPosition = `${-treesSpread}px bottom, calc(100% + ${treesSpread}px) bottom, calc(100% + ${treesSpread}px) bottom`;
+            treesLayer.style.backgroundSize = `auto 100%, auto 100%, auto 100%`;
+            
+            // Layer 1 (mid) - spreads faster, slight scale
+            const midLayer = document.querySelector('.forest-mid');
+            const midSpread = scrollProgress * maxSpread * 0.8;
+            const midScale = 1 + (scrollProgress * 0.15);
+            midLayer.style.backgroundPosition = `${-midSpread}px bottom, calc(100% + ${midSpread}px) bottom`;
+            midLayer.style.backgroundSize = `${45 * midScale}% auto, ${45 * midScale}% auto`;
+            
+            // Near - spreads much faster, moderate scale
+            const nearLayer = document.querySelector('.forest-near');
+            const nearSpread = scrollProgress * maxSpread * 1.3;
+            const nearScale = 1 + (scrollProgress * 0.25); // 25% scale increase
+            nearLayer.style.backgroundPosition = `${-nearSpread}px bottom, calc(100% + ${nearSpread}px) bottom`;
+            nearLayer.style.backgroundSize = `${50 * nearScale}% auto, ${50 * nearScale}% auto`;
+            
+            // Foreground - spreads fastest, whooshes past
+            const foregroundLayer = document.querySelector('.forest-foreground');
+            const foreSpread = scrollProgress * maxSpread * 2;
+            const foreScale = 1 + (scrollProgress * 0.4); // 40% scale increase
+            foregroundLayer.style.backgroundPosition = `${-foreSpread}px bottom, calc(100% + ${foreSpread}px) bottom`;
+            foregroundLayer.style.backgroundSize = `${55 * foreScale}% auto, ${55 * foreScale}% auto`;
+            
+            // Gentle darkening as we go deeper
+            const container = document.querySelector('.forest-container');
+            container.style.filter = `brightness(${Math.max(0.6, 1 - scrollProgress * 0.4)})`;
+        });
+
+        // Bloom flowers on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Add random flowers when section comes into view
+                    for (let i = 0; i < 3; i++) {
+                        setTimeout(() => {
+                            const flower = document.createElement('div');
+                            flower.className = 'bloom';
+                            flower.textContent = ['🌸', '🌼', '🌺'][Math.floor(Math.random() * 3)];
+                            flower.style.left = Math.random() * 90 + '%';
+                            flower.style.top = Math.random() * 80 + 20 + '%';
+                            entry.target.appendChild(flower);
+                            
+                            setTimeout(() => flower.remove(), 2000);
+                        }, i * 300);
+                    }
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('.leaf-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const target = document.querySelector(link.getAttribute('href'));
+                target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Drawings avoid cursor
+        const drawings = document.querySelectorAll('.drawing-item');
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY + window.pageYOffset;
+        });
+
+        function updateDrawingPositions() {
+            drawings.forEach((drawing) => {
+                const rect = drawing.getBoundingClientRect();
+                const drawingX = rect.left + rect.width / 2;
+                const drawingY = rect.top + window.pageYOffset + rect.height / 2;
+                
+                const deltaX = mouseX - drawingX;
+                const deltaY = mouseY - drawingY;
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                
+                const avoidDistance = 150; // Distance at which drawings start avoiding
+                
+                if (distance < avoidDistance) {
+                    const angle = Math.atan2(deltaY, deltaX);
+                    const pushDistance = (avoidDistance - distance) * 0.3;
+                    const offsetX = -Math.cos(angle) * pushDistance;
+                    const offsetY = -Math.sin(angle) * pushDistance;
+                    
+                    drawing.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(1.05)`;
+                } else {
+                    drawing.style.transform = 'translate(0, 0) scale(1)';
+                }
+            });
+            
+            requestAnimationFrame(updateDrawingPositions);
+        }
+        
+        updateDrawingPositions();
+    </script>
+</body>
+</html>
