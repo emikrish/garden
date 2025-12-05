@@ -654,89 +654,50 @@
             cursorCore.style.top = e.clientY + "px";
         });
 
-        // ===== Forest parallax (using only trees) =====
+        // ===== Forest parallax (restored original style) =====
         window.addEventListener("scroll", () => {
-            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollY = window.pageYOffset;
             const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollProgress = maxScroll > 0 ? scrollY / maxScroll : 0;
+            const scrollProgress = scrollY / maxScroll;
 
-            const bgLayer = document.querySelector(".forest-bg");
-            const farLayer = document.querySelector(".forest-far");
-            const midLayer = document.querySelector(".forest-mid");
-            const nearLayer = document.querySelector(".forest-near");
+            const maxSpread = 1200;
 
-            const maxShift = 80; // px horizontal drift
+            const bgLayer = document.querySelector('.forest-bg');
+            const farLayer = document.querySelector('.forest-far');
+            const midLayer = document.querySelector('.forest-mid');
+            const nearLayer = document.querySelector('.forest-near');
 
-            // Background slightly darkens
+            // Background subtle fade
             if (bgLayer) {
-                bgLayer.style.opacity = String(0.9 - scrollProgress * 0.2);
+                bgLayer.style.opacity = Math.max(0.6, 0.9 - scrollProgress * 0.3);
             }
 
+            // Far layer
             if (farLayer) {
-                const farShift = maxShift * scrollProgress * 0.4;
-                farLayer.style.transform = `translateX(${-farShift}px)`;
+                const farSpread = scrollProgress * maxSpread * 0.4;
+                const farScale = 1 + (scrollProgress * 0.1);
+                farLayer.style.backgroundPosition = `${-farSpread}px bottom`;
+                farLayer.style.backgroundSize = `${45 * farScale}% auto`;
             }
 
+            // Mid layer
             if (midLayer) {
-                const midShift = maxShift * scrollProgress * 0.8;
-                midLayer.style.transform = `translateX(${midShift}px)`;
+                const midSpread = scrollProgress * maxSpread * 0.75;
+                const midScale = 1 + (scrollProgress * 0.15);
+                midLayer.style.backgroundPosition = `${midSpread}px bottom`;
+                midLayer.style.backgroundSize = `${50 * midScale}% auto`;
             }
 
+            // Near layer
             if (nearLayer) {
-                const nearShift = maxShift * scrollProgress * 1.2;
-                nearLayer.style.transform = `translateX(${-nearShift}px)`;
+                const nearSpread = scrollProgress * maxSpread * 1.3;
+                const nearScale = 1 + (scrollProgress * 0.25);
+                nearLayer.style.backgroundPosition = `${-nearSpread}px bottom`;
+                nearLayer.style.backgroundSize = `${60 * nearScale}% auto`;
             }
         });
 
-        // ===== Bloom flowers when sections come into view =====
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        for (let i = 0; i < 3; i++) {
-                            setTimeout(() => {
-                                const flower = document.createElement("div");
-                                flower.className = "bloom";
-                                flower.textContent = ["🌸", "🌼", "🌺"][Math.floor(Math.random() * 3)];
-                                flower.style.left = Math.random() * 90 + "%";
-                                flower.style.top = Math.random() * 80 + 20 + "%";
-                                entry.target.appendChild(flower);
-
-                                setTimeout(() => flower.remove(), 2000);
-                            }, i * 300);
-                        }
-                    }
-                });
-            },
-            { threshold: 0.3 }
-        );
-
-        document.querySelectorAll("section").forEach((section) => {
-            observer.observe(section);
-        });
-
-        // ===== Smooth scroll for leaf navigation =====
-        document.querySelectorAll(".leaf-link").forEach((link) => {
-            link.addEventListener("click", (e) => {
-                e.preventDefault();
-                const target = document.querySelector(link.getAttribute("href"));
-                if (target) {
-                    target.scrollIntoView({ behavior: "smooth" });
-                }
-            });
-        });
-
-        // ===== Drawings avoid cursor (stronger movement) =====
-        const drawings = document.querySelectorAll(".drawing-item");
-        let mouseX = 0;
-        let mouseY = 0;
-
-        document.addEventListener("mousemove", (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY + window.pageYOffset;
-        });
-
-        function updateDrawingPositions() {
+        updateDrawingPositions() {
             const avoidDistance = 220; // bigger radius
             drawings.forEach((drawing) => {
                 const rect = drawing.getBoundingClientRect();
