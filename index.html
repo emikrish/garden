@@ -1,4 +1,13 @@
-<!DOCTYPE html>
+@keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -144,7 +153,7 @@
         .forest-trees {
             background-image: url('images/trees2.png'), url('images/trees1.png'), url('images/trees3.png');
             background-position: left bottom, right bottom, right bottom;
-            background-size: 40% auto, 40% auto, 40% auto;
+            background-size: auto 100%, auto 100%, auto 100%;
             background-repeat: no-repeat;
             opacity: 0.8;
         }
@@ -221,22 +230,18 @@
             text-shadow: 2px 2px 20px rgba(0,0,0,0.5);
         }
 
-        @keyframes floatIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         .floating-flower {
             position: absolute;
-            font-size: 40px;
+            width: 60px;
+            height: 60px;
             animation: float 6s ease-in-out infinite;
             opacity: 0.7;
+        }
+
+        .floating-flower img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         @keyframes float {
@@ -313,14 +318,15 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            transition: all 0.5s ease;
             font-size: 14px;
             color: #666;
+            z-index: 1;
         }
 
         .drawing-item:hover {
-            transform: scale(1.1) rotate(5deg);
-            z-index: 10;
+            transform: scale(1.15) rotate(5deg);
+            z-index: 100;
         }
 
         .drawing-item:nth-child(1) { top: 10%; left: 10%; }
@@ -510,21 +516,17 @@
 
     <!-- Leaf Navigation -->
     <nav class="leaf-nav">
-        <a href="#photography" class="leaf-link">
-            <span style="font-size: 28px;">🍃</span>
-            <span class="leaf-label">photography</span>
-        </a>
         <a href="#drawings" class="leaf-link">
             <span style="font-size: 28px;">🌿</span>
             <span class="leaf-label">funny drawings</span>
         </a>
+        <a href="#photography" class="leaf-link">
+            <span style="font-size: 28px;">🍃</span>
+            <span class="leaf-label">photography</span>
+        </a>
         <a href="#tattoos" class="leaf-link">
             <span style="font-size: 28px;">🍂</span>
             <span class="leaf-label">tattoo work</span>
-        </a>
-        <a href="#art" class="leaf-link">
-            <span style="font-size: 28px;">🌱</span>
-            <span class="leaf-label">art i like</span>
         </a>
         <a href="#music" class="leaf-link">
             <span style="font-size: 28px;">🌾</span>
@@ -539,23 +541,18 @@
     <div class="content">
         <!-- Hero Section -->
         <section class="hero" style="background: transparent;">
-            <h1>welcome to my garden 🌸</h1>
-            <div class="floating-flower" style="left: 20%; top: 20%;">🌼</div>
-            <div class="floating-flower" style="right: 25%; top: 30%; animation-delay: 1s;">🌺</div>
-            <div class="floating-flower" style="left: 60%; bottom: 30%; animation-delay: 2s;">🌻</div>
-            <div class="floating-flower" style="right: 15%; bottom: 20%; animation-delay: 1.5s;">🌷</div>
-        </section>
-
-        <!-- Photography Section -->
-        <section id="photography">
-            <h2 class="section-title">photography</h2>
-            <div class="photo-grid">
-                <div class="photo-item">photo 1</div>
-                <div class="photo-item">photo 2</div>
-                <div class="photo-item">photo 3</div>
-                <div class="photo-item">photo 4</div>
-                <div class="photo-item">photo 5</div>
-                <div class="photo-item">photo 6</div>
+            <h1>welcome to my garden</h1>
+            <div class="floating-flower" style="left: 20%; top: 20%;">
+                <img src="images/anemone1.png" alt="flower">
+            </div>
+            <div class="floating-flower" style="right: 25%; top: 30%; animation-delay: 1s;">
+                <img src="images/anemone2.png" alt="flower">
+            </div>
+            <div class="floating-flower" style="left: 60%; bottom: 30%; animation-delay: 2s;">
+                <img src="images/anemone3.png" alt="flower">
+            </div>
+            <div class="floating-flower" style="right: 15%; bottom: 20%; animation-delay: 1.5s;">
+                <img src="images/anemone1.png" alt="flower">
             </div>
         </section>
 
@@ -577,42 +574,39 @@
             </div>
         </section>
 
+        <!-- Photography Section -->
+        <section id="photography">
+            <h2 class="section-title">photography</h2>
+            <div class="photo-grid">
+                <div class="photo-item">photo 1</div>
+                <div class="photo-item">photo 2</div>
+                <div class="photo-item">photo 3</div>
+                <div class="photo-item">photo 4</div>
+                <div class="photo-item">photo 5</div>
+                <div class="photo-item">photo 6</div>
+            </div>
+        </section>
+
         <!-- Tattoos Section -->
         <section id="tattoos">
             <h2 class="section-title">tattoo work</h2>
             <div class="infinite-scroll">
                 <div class="scroll-content">
-                    <div class="scroll-item">tattoo 1</div>
-                    <div class="scroll-item">tattoo 2</div>
-                    <div class="scroll-item">tattoo 3</div>
-                    <div class="scroll-item">tattoo 4</div>
-                    <div class="scroll-item">tattoo 5</div>
+                    <div class="scroll-item"><img src="images/tat1.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat2.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat3.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat4.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat5.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat6.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat7.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
                     <!-- Duplicated for seamless loop -->
-                    <div class="scroll-item">tattoo 1</div>
-                    <div class="scroll-item">tattoo 2</div>
-                    <div class="scroll-item">tattoo 3</div>
-                    <div class="scroll-item">tattoo 4</div>
-                    <div class="scroll-item">tattoo 5</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Art I Like Section -->
-        <section id="art">
-            <h2 class="section-title">art i like</h2>
-            <div class="infinite-scroll">
-                <div class="scroll-content">
-                    <div class="scroll-item">artwork 1</div>
-                    <div class="scroll-item">artwork 2</div>
-                    <div class="scroll-item">artwork 3</div>
-                    <div class="scroll-item">artwork 4</div>
-                    <div class="scroll-item">artwork 5</div>
-                    <!-- Duplicated for seamless loop -->
-                    <div class="scroll-item">artwork 1</div>
-                    <div class="scroll-item">artwork 2</div>
-                    <div class="scroll-item">artwork 3</div>
-                    <div class="scroll-item">artwork 4</div>
-                    <div class="scroll-item">artwork 5</div>
+                    <div class="scroll-item"><img src="images/tat1.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat2.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat3.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat4.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat5.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat6.jpg" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
+                    <div class="scroll-item"><img src="images/tat7.png" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;" alt="tattoo"></div>
                 </div>
             </div>
         </section>
@@ -699,7 +693,7 @@
             const treesSpread = scrollProgress * maxSpread * 0.6;
             const treesScale = 1 + (scrollProgress * 0.12);
             treesLayer.style.backgroundPosition = `${-treesSpread}px bottom, calc(100% + ${treesSpread}px) bottom, calc(100% + ${treesSpread}px) bottom`;
-            treesLayer.style.backgroundSize = `${40 * treesScale}% auto, ${40 * treesScale}% auto, ${40 * treesScale}% auto`;
+            treesLayer.style.backgroundSize = `auto 100%, auto 100%, auto 100%`;
             
             // Layer 1 (mid) - spreads faster, slight scale
             const midLayer = document.querySelector('.forest-mid');
@@ -760,6 +754,45 @@
                 target.scrollIntoView({ behavior: 'smooth' });
             });
         });
+
+        // Drawings avoid cursor
+        const drawings = document.querySelectorAll('.drawing-item');
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY + window.pageYOffset;
+        });
+
+        function updateDrawingPositions() {
+            drawings.forEach((drawing) => {
+                const rect = drawing.getBoundingClientRect();
+                const drawingX = rect.left + rect.width / 2;
+                const drawingY = rect.top + window.pageYOffset + rect.height / 2;
+                
+                const deltaX = mouseX - drawingX;
+                const deltaY = mouseY - drawingY;
+                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                
+                const avoidDistance = 150; // Distance at which drawings start avoiding
+                
+                if (distance < avoidDistance) {
+                    const angle = Math.atan2(deltaY, deltaX);
+                    const pushDistance = (avoidDistance - distance) * 0.3;
+                    const offsetX = -Math.cos(angle) * pushDistance;
+                    const offsetY = -Math.sin(angle) * pushDistance;
+                    
+                    drawing.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(1.05)`;
+                } else {
+                    drawing.style.transform = 'translate(0, 0) scale(1)';
+                }
+            });
+            
+            requestAnimationFrame(updateDrawingPositions);
+        }
+        
+        updateDrawingPositions();
     </script>
 </body>
 </html>
