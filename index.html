@@ -116,58 +116,53 @@
             }
         }
 
-        /* ========== FOREST DEPTH PARALLAX (TREES ONLY) ========== */
-        .forest-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            z-index: -1;
-            overflow: hidden;
-        }
+        /* ========== FOREST DEPTH PARALLAX (TREES ONLY — FIXED VERSION) ========== */
+.forest-container {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+}
 
-        .forest-layer {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            transition: transform 0.1s ease-out, opacity 0.2s ease-out;
-        }
+.forest-layer {
+    position: absolute;
+    width: 120%; /* prevents edges when shifting */
+    height: 120%;
+    top: -10%;
+    left: -10%;
+    background-size: cover;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+    will-change: transform;
+}
 
-        /* Background backing */
-        .forest-bg {
-            background-image: url("images/tree_backing.jpeg");
-            opacity: 0.9;
-        }
+/* Backing */
+.forest-bg {
+    background-image: url("images/tree_backing.jpeg");
+    opacity: 0.9;
+}
 
-        /* Far trees */
-        .forest-far {
-            background-image: url("images/trees2.png");
-            background-position: center bottom;
-            background-size: auto 90%;
-            opacity: 0.7;
-        }
+/* Far trees */
+.forest-far {
+    background-image: url("images/trees2.png");
+    opacity: 0.7;
+}
 
-        /* Mid trees */
-        .forest-mid {
-            background-image: url("images/trees1.png");
-            background-position: center bottom;
-            background-size: auto 100%;
-            opacity: 0.85;
-        }
+/* Middle trees */
+.forest-mid {
+    background-image: url("images/trees1.png");
+    opacity: 0.85;
+}
 
-        /* Near trees */
-        .forest-near {
-            background-image: url("images/trees3.png");
-            background-position: center bottom;
-            background-size: auto 110%;
-            opacity: 0.9;
-        }
+/* Near trees */
+.forest-near {
+    background-image: url("images/trees3.png");
+    opacity: 0.95;
+}
 
-        /* Floating particles */
+/* Floating particles */ */
         .particle {
             position: fixed;
             pointer-events: none;
