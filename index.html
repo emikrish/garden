@@ -319,8 +319,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            /* Remove or comment out the box-shadow line */
-            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); */
             transition: all 0.5s ease;
             font-size: 14px;
             color: #666;
@@ -335,7 +333,7 @@
         }
 
         .drawing-item:hover {
-            transform: scale(1.15) rotate(5deg);
+            transform: scale(1.25) rotate(5deg);
             z-index: 100;
         }
 
@@ -441,7 +439,7 @@
         /* Animated Elements */
         .bloom {
             position: absolute;
-            font-size: 30px;
+            font-size: 50px;
             opacity: 0;
             animation: bloom 2s ease-out forwards;
         }
@@ -775,11 +773,11 @@
                 const deltaY = mouseY - drawingY;
                 const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-                const avoidDistance = 150; // Distance at which drawings start avoiding
+                const avoidDistance = 200; // Distance at which drawings start avoiding
 
                 if (distance < avoidDistance) {
                     const angle = Math.atan2(deltaY, deltaX);
-                    const pushDistance = (avoidDistance - distance) * 0.3;
+                    const pushDistance = (avoidDistance - distance) * 0.6;
                     const offsetX = -Math.cos(angle) * pushDistance;
                     const offsetY = -Math.sin(angle) * pushDistance;
 
