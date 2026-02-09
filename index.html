@@ -314,16 +314,24 @@
             position: absolute;
             width: 200px;
             height: 200px;
-            background: white;
+            background: transparent;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            /* Remove or comment out the box-shadow line */
+            /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); */
             transition: all 0.5s ease;
             font-size: 14px;
             color: #666;
             z-index: 1;
+        }
+        
+        .drawing-item img {
+            max-width: 80%; 
+            max-height: 80%; 
+            object-fit: contain;
+            filter: invert(1);  /* Add this line */
         }
 
         .drawing-item:hover {
